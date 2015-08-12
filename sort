@@ -1,0 +1,75 @@
+//思想：实现快速排序的关键是首先在数组中选择一个数字（这里随机选取）作为枢纽元，将枢纽元与数组中最后的元素交换使得枢纽元  
+//离开要被分割的数据段,将数组中比枢纽元小的元素都移动数组的左边，将数组中比枢纽元大的元素都移动数组的右边  
+#include<iostream>  
+using namespace std;  
+#include<time.h> 
+#include<stdlib.h>
+int RandomInRange(int start ,int end)  
+{  
+    if(end>start)  
+    {  
+      srand(time(NULL));  
+      return start+rand() %((end-start));//产生start~end之间的随机数  
+    }  
+}  
+void swap_element(int *a,int *b)  
+{  
+    int temp;  
+    temp=*a;  
+    *a=*b;  
+    *b=temp;  
+}  
+  
+int Partition(int data[],int length,int start,int end)  
+{  
+    if(data==NULL || length<=0||start<0 || end>=length)  
+    {  
+        cout<<"error1!"<<endl;  
+        exit(0);  
+    }  
+    int index=RandomInRange(start,end);
+	cout<<index<<" ";  
+    cout<<endl; 
+    swap_element(&data[index],&data[end]);  
+    int small=start-1;  
+    for(index=start;index<end;index++)  
+    {  
+        if(data[index]<data[end])  
+        {  
+            ++small;  
+            if(small != index)  
+            {  
+                swap_element(&data[index],&data[small]);  
+            }  
+        }  
+    }  
+    ++small;  
+    swap_element(&data[small],&data[end]); 
+	//每步后的数组状态
+	for(int i=0;i<10;i++)  
+    cout<<data[i]<<" ";  
+    cout<<endl; 
+    return small;  
+}  
+void Quicksort(int data[],int length,int start,int end)  
+{  
+    if(start==end)  
+    {  
+        return ;  
+    }  
+    int index=Partition(data,length,start,end);  
+    if(index>start)  
+        Quicksort(data,length,start,index-1);  
+    if(index<end)  
+        Quicksort(data,length,index+1,end);  
+}  
+//int main(void)  
+//{  
+//    int data[10]={1,4,7,0,6,10,3,8,2,9};  
+//    Quicksort(data,10,0,9);  
+//    for(int i=0;i<10;i++)  
+//        cout<<data[i]<<" ";  
+//    cout<<endl; 
+//	system("pause");
+//    return 0;  
+//}
