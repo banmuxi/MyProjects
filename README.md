@@ -1,0 +1,206 @@
+# MyProjects1
+
+#include <stdio.h> 
+#include <iostream> 
+#include <stack> 
+#include <stdlib.h> //加上system("pause")所依赖的头文件
+
+using namespace std;
+
+struct ListNode
+{
+	int m_nValue;
+	ListNode *m_pNext;
+};
+
+void RemoveNode1(ListNode **pHead,int value)
+{
+	if(pHead==NULL ||*pHead==NULL)return;//空链表
+	ListNode *pToBeDeleted=NULL;
+	if((*pHead)->m_nValue==value)//首节点就是要删的节点
+	{
+		pToBeDeleted=*pHead;
+		*pHead=(*pHead)->m_pNext;
+	}
+	else
+	{
+		ListNode *pNode=*pHead;
+		while(pNode->m_pNext !=NULL && pNode->m_nValue !=value)
+			pNode=pNode->m_pNext ;
+		if(pNode->m_pNext !=NULL && pNode->m_nValue ==value)
+		{
+			pToBeDeleted=pNode->m_pNext ;//pToBeDeleted记录要删除的节点
+			pNode->m_pNext =pNode->m_pNext->m_pNext  ;//将要删除的节点指针指向下一个
+		}
+	}
+	if(pToBeDeleted!=NULL)
+	{
+		delete pToBeDeleted;
+		pToBeDeleted=NULL;
+	}
+}
+void RemoveNode(ListNode **pHead,int value)
+{
+	
+    if(pHead==NULL)  
+        return;  
+    if(*pHead==NULL)  
+        return;  
+    ListNode * p=*pHead,*q=NULL;  
+    while(p)  
+    {  
+        if(p->m_nValue==value)  
+        {  
+            //第一个结点即为要删除的结点  
+            if(q==NULL)  
+            {  
+                *pHead=(*pHead)->m_pNext;  
+                delete p;  
+                p=NULL;  
+                return;  
+            }  
+            else  
+            {  
+                q->m_pNext=p->m_pNext;  
+                delete p;  
+                p=NULL;  
+                return;  
+            }  
+        }  
+        else  
+        {  
+            q=p;  
+            p=p->m_pNext;  
+        }  
+    } 
+}
+void PrintListReversingly_Iteratively(ListNode *pHead)//利用栈
+{
+	std::stack <ListNode*>nodes;
+	ListNode *pNode=pHead;
+	while (pNode !=NULL)
+	{
+		nodes.push (pNode);
+		pNode=pNode->m_pNext ;
+	}
+	while (!nodes.empty() )
+	{
+		pNode=nodes.top ();
+		cout<<pNode->m_nValue<<" ";
+		nodes.pop ();
+	}
+}
+void PrintListReversingly_Iteratively1(ListNode *pHead)//利用递归如果链表很长容易导致递归调用层级很深造成函数调用栈溢出
+{
+	if(pHead!=NULL)
+	{
+		if(pHead->m_pNext !=NULL)
+			PrintListReversingly_Iteratively1(pHead->m_pNext );
+		cout<<pHead->m_nValue <<"";
+	}
+}
+ListNode * CreateLink(int a[],int k)  //创建有K个节点的链表
+{  
+    ListNode * Head=NULL,*q=NULL;  
+    for(int i=0;i<k;i++)  
+    {  
+        ListNode * pNew=new ListNode();  
+        pNew->m_nValue=a[i];  
+        pNew->m_pNext=NULL;  
+  
+        if(Head==NULL)  
+        {  
+            Head=pNew;  
+            q=pNew;  
+        }  
+        else  
+        {  
+            q->m_pNext=pNew;  
+            q=q->m_pNext;  
+        }  
+    }  
+    return Head;  
+}  
+ 
+void printLink(ListNode * pHead)  //从头到尾打印列表 
+{  
+    cout<<"Link Details:";  
+    ListNode *p=pHead;  
+    while(p)  
+    {  
+        cout<<p->m_nValue<<" ";  
+        p=p->m_pNext;  
+    }  
+    cout<<endl;  
+} 
+
+//======测试用例========  
+//1.没有包含该结点  
+void Test1()  
+{  
+    cout<<"test1 result:"<<endl;  
+    int a[]={1,2,3};  
+    ListNode * ptr=CreateLink(a,3);  
+    printLink(ptr);  
+    RemoveNode(&ptr,4);  
+    printLink(ptr);  
+}  
+//2.结点在第一个位置  
+void Test2()  
+{  
+    cout<<"test2 result:"<<endl;  
+    int a[]={1,2,3};  
+    ListNode * ptr=CreateLink(a,3);  
+    printLink(ptr);  
+    RemoveNode(&ptr,1);  
+    printLink(ptr);  
+}  
+//3.结点在最后一个位置  
+void Test3()  
+{  
+    cout<<"test3 result:"<<endl;  
+    int a[]={1,2,3};  
+    ListNode * ptr=CreateLink(a,3);  
+    printLink(ptr);  
+    RemoveNode(&ptr,3);  
+    printLink(ptr);  
+}  
+//4.结点在中间  
+void Test4()  
+{  
+    cout<<"test4 result:"<<endl;  
+    int a[]={1,2,3,4,5};  
+    ListNode * ptr=CreateLink(a,5);  
+    printLink(ptr);  
+    RemoveNode(&ptr,3);  
+    printLink(ptr);  
+}  
+//5.链表没有结点，空链表  
+void Test5()  
+{  
+    cout<<"test5 result:"<<endl;  
+    ListNode * ptr=NULL;  
+    printLink(ptr);  
+    RemoveNode(&ptr,3);  
+    printLink(ptr);  
+}  
+//6.只有一个结点  
+void Test6()  
+{  
+    cout<<"test6 result:"<<endl;  
+    int a[]={1};  
+    ListNode * ptr=CreateLink(a,1);  
+    printLink(ptr);  
+    RemoveNode(&ptr,1);  
+    printLink(ptr);  
+}  
+//void main()  
+//{  
+//    Test1();  
+//    Test2();  
+//    Test3();  
+//    Test4();  
+//    Test5();  
+//    Test6();  
+//  system("pause");
+//}  
