@@ -1,0 +1,150 @@
+#include<iostream>  
+#include <stdio.h>  
+#include <stack>
+#include<stdlib.h>
+using namespace std;
+
+//反转链表  
+struct ListNode  
+{  
+    int m_nValue;  
+    ListNode * m_pNext;  
+};  
+ListNode * CreateLink1(int a[],int k)  
+{  
+    ListNode * Head=NULL,*q=NULL;  
+    for(int i=0;i<k;i++)  
+    {  
+        ListNode * pNew=new ListNode();  
+        pNew->m_nValue=a[i];  
+        pNew->m_pNext=NULL;  
+  
+        if(Head==NULL)  
+        {  
+            Head=pNew;  
+            q=pNew;  
+        }  
+        else  
+        {  
+            q->m_pNext=pNew;  
+            q=q->m_pNext;  
+        }  
+    }  
+    return Head;  
+}  
+//从头到尾打印列表  
+void printLink1(ListNode * pHead)  
+{  
+    cout<<"链表内容为:";  
+    ListNode *p=pHead;  
+    while(p)  
+    {  
+        cout<<p->m_nValue<<" ";  
+        p=p->m_pNext;  
+    }  
+    cout<<endl;  
+}  
+//自己写的  
+ListNode * ReverseList1(ListNode * pHead)  
+{  
+    if(pHead==NULL)  
+        return NULL;  
+    ListNode * p=pHead->m_pNext,*q=NULL;  
+    while(p)  
+    {  
+        q=p->m_pNext;  
+        pHead->m_pNext=p->m_pNext;  
+        p->m_pNext=pHead;  
+        pHead=p;  
+        p=q;  
+    }  
+    return pHead;  
+}  
+//书上的  
+ListNode *ReverseList(ListNode * pHead)  
+{  
+    ListNode *pReversedHead=NULL;  
+    ListNode *pNode=pHead;  
+    ListNode *pPrev=NULL;  
+    while(pNode!=NULL)  
+    {  
+        ListNode *pNext=pNode->m_pNext;  
+  
+        if(pNext==NULL)  
+            pReversedHead=pNode;  
+        pNode->m_pNext=pPrev;  
+  
+        pPrev=pNode;  
+        pNode=pNext;  
+    }  
+    return pReversedHead;  
+}  
+//递归实现  
+//注意判断oldList!=NULL的情况  
+ListNode *reverse(ListNode *oldList,ListNode *newHead=NULL)  
+{  
+    if(oldList!=NULL)  
+    {  
+        ListNode *next=oldList->m_pNext;//记录上次反转后的链表  
+        oldList->m_pNext=newHead;//将当前节点插入到翻转后链表的开头  
+        newHead=oldList;//递归处理剩余的链表  
+        return (next==NULL)?newHead:reverse(next,newHead);  
+    }  
+    return NULL;  
+}  
+//=======测试用例=========  
+//1.pListHead为空  
+void Test31()  
+{  
+    cout<<"测试用例test1"<<endl;  
+    ListNode * ptr=NULL;  
+    printLink1(ptr);  
+    ptr=ReverseList(ptr);  
+    printLink1(ptr);  
+  
+    //测试递归函数  
+    cout<<"递归"<<endl;  
+    ListNode *newHead=NULL;  
+    newHead=reverse(ptr,NULL);  
+    printLink1(newHead);  
+}  
+//2.长度为1个结点  
+void Test32()  
+{  
+    cout<<"测试用例test2"<<endl;  
+    int a[]={1};  
+    ListNode * ptr=CreateLink1(a,1);  
+    printLink1(ptr);  
+    ptr=ReverseList(ptr);  
+    printLink1(ptr);  
+  
+    //测试递归函数  
+    cout<<"递归"<<endl;  
+    ListNode *newHead=NULL;  
+    newHead=reverse(ptr,NULL);  
+    printLink1(newHead);  
+}  
+//3.长度>=2个结点  
+void Test33()  
+{  
+    cout<<"测试用例test3"<<endl;  
+    int a[]={1,2,3,4};  
+    ListNode * ptr=CreateLink1(a,4);  
+    printLink1(ptr);  
+    ptr=ReverseList(ptr);  
+    printLink1(ptr);  
+  
+        //测试递归函数  
+    cout<<"递归"<<endl;  
+    ListNode *newHead=NULL;  
+    newHead=reverse(ptr,NULL);  
+    printLink1(newHead);  
+}  
+  
+/*void main()  
+{  
+    Test1();  
+    Test2();  
+    Test3();
+	system("pause");
+} */ 
